@@ -11,6 +11,8 @@ import Cocoa
 class Document: NSDocument {
     var originalXml: XMLDocument?
     var mergedXml: XMLDocument?
+    var tempXml: XMLDocument?
+    var indexes: [Int] = []
 
     override init() {
         super.init()
@@ -52,15 +54,64 @@ class Document: NSDocument {
     }
 
     func merge() {
-        // document.inferredMetricsTieBreakers
-        if let root = self.originalXml?.rootElement() {
-            let inferredMetricsTieBreakers = root.elements(forName: "inferredMetricsTieBreakers")
-            if inferredMetricsTieBreakers.count == 0 {
-                self.mergedXml = self.originalXml
-                return
+        self.tempXml = self.originalXml
+        if let root = self.tempXml?.rootElement() {
+            if let inferredMetricsTieBreakers = root.elements(forName: "inferredMetricsTieBreakers").first {
+
+                if inferredMetricsTieBreakers.children?.count == 0 {
+                    self.mergedXml = self.originalXml
+                    return
+                } else {
+                    if let arrayOfSegues = inferredMetricsTieBreakers.children {
+                        let arrayOfUniqueIds = self.createArrayOfUniqueIds(arrayOfSegues: arrayOfSegues)
+                        if self.checkIfThereAreReplicatedIds(arrayOfUniqueIDs: arrayOfUniqueIds, arrayOfSegues: arrayOfSegues) {
+                            self.removeReplicatedIds()
+                            Swift.print("new xml: \(inferredMetricsTieBreakers)")
+                            self.mergedXml = self.tempXml
+                        }
+                    }
+                }
             }
         }
 
+    }
+    
+    func createArrayOfUniqueIds(arrayOfSegues: [XMLNode]) -> [String] {
+        var arrayOfUniqueIDs: [String] = []
+        
+        for i in 0...arrayOfSegues.count - 1 {
+            
+            if arrayOfSegues[i].kind == .element {
+                let node = arrayOfSegues[i]
+                let element = node as! XMLElement
+                
+                if let keyNode = element.attribute(forName: "reference")?.stringValue  {
+                    Swift.print("segue id: \(keyNode)")
+                    if arrayOfUniqueIDs.contains(keyNode) {
+                        self.indexes.append(i)
+                    } else {
+                        arrayOfUniqueIDs.append(keyNode)
+                    }
+                }
+            }
+        }
+        
+        return arrayOfUniqueIDs
+    }
+    
+    func checkIfThereAreReplicatedIds(arrayOfUniqueIDs: [String], arrayOfSegues: [XMLNode]) -> Bool {
+        if arrayOfSegues.count > arrayOfUniqueIDs.count {
+            return true
+        }
+        
+        return false
+    }
+    
+    func removeReplicatedIds() {
+        for index in self.indexes {
+            self.tempXml!.rootElement()!.elements(forName: "inferredMetricsTieBreakers").first!.removeChild(at: index)
+            Swift.print("removed")
+        }
     }
 }
 
