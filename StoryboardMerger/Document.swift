@@ -9,6 +9,8 @@
 import Cocoa
 
 class Document: NSDocument {
+    var originalXml: XMLDocument?
+    var mergedXml: XMLDocument?
 
     override init() {
         super.init()
@@ -16,7 +18,7 @@ class Document: NSDocument {
     }
 
     override class var autosavesInPlace: Bool {
-        return true
+        return false
     }
 
     override func makeWindowControllers() {
@@ -36,9 +38,29 @@ class Document: NSDocument {
         // Insert code here to read your document from the given data of the specified type. If outError != nil, ensure that you create and set an appropriate error when returning false.
         // You can also choose to override readFromFileWrapper:ofType:error: or readFromURL:ofType:error: instead.
         // If you override either of these, you should also override -isEntireFileLoaded to return false if the contents are lazily loaded.
-        throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
+//        guard let xml = XMLParser(data: data) else {
+//            throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
+//        }
+        
+        do {
+            try
+                self.originalXml = XMLDocument(data: data)
+        } catch  {
+            //error
+        }
+        
     }
 
+    func merge() {
+        // document.inferredMetricsTieBreakers
+        if let root = self.originalXml?.rootElement() {
+            let inferredMetricsTieBreakers = root.elements(forName: "inferredMetricsTieBreakers")
+            if inferredMetricsTieBreakers.count == 0 {
+                self.mergedXml = self.originalXml
+                return
+            }
+        }
 
+    }
 }
 

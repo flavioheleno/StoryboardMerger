@@ -9,11 +9,14 @@
 import Cocoa
 
 class ViewController: NSViewController {
-
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.progressIndicator.doubleValue = 0.0
+        
     }
 
     override var representedObject: Any? {
@@ -21,7 +24,12 @@ class ViewController: NSViewController {
         // Update the view, if already loaded.
         }
     }
-
+    
+    //MARK:- IBActions
+    @IBAction func didClickMergeButton(_ sender: Any) {
+        let document = self.view.window?.windowController?.document as! Document
+        document.merge()
+    }
 
 }
 
