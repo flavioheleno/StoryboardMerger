@@ -12,7 +12,7 @@ class Document: NSDocument {
     var originalXml: XMLDocument?
     var mergedXml: XMLDocument?
     var tempXml: XMLDocument?
-    var indexes: [Int] = []
+    var indexesToRemove: [Int] = []
 
     override init() {
         super.init()
@@ -65,11 +65,17 @@ class Document: NSDocument {
                     if let arrayOfSegues = inferredMetricsTieBreakers.children {
                         let arrayOfUniqueIds = self.createArrayOfUniqueIds(arrayOfSegues: arrayOfSegues)
                         if self.checkIfThereAreReplicatedIds(arrayOfUniqueIDs: arrayOfUniqueIds, arrayOfSegues: arrayOfSegues) {
-                            self.removeReplicatedIds()
-                            Swift.print("new xml: \(inferredMetricsTieBreakers)")
-                            self.mergedXml = self.tempXml
+                            self.removeIds()
                         }
                     }
+                    
+                    if let arrayOfSegues = inferredMetricsTieBreakers.children {
+                        if self.checkIfThereAreIdsWithOnlyOneReference(arrayOfSegues: arrayOfSegues) {
+                            self.removeIds()
+                        }
+                    }
+                    
+                    self.mergedXml = self.tempXml
                 }
             }
         }
@@ -86,9 +92,8 @@ class Document: NSDocument {
                 let element = node as! XMLElement
                 
                 if let keyNode = element.attribute(forName: "reference")?.stringValue  {
-                    Swift.print("segue id: \(keyNode)")
                     if arrayOfUniqueIDs.contains(keyNode) {
-                        self.indexes.append(i)
+                        self.indexesToRemove.append(i)
                     } else {
                         arrayOfUniqueIDs.append(keyNode)
                     }
@@ -107,11 +112,36 @@ class Document: NSDocument {
         return false
     }
     
-    func removeReplicatedIds() {
-        for index in self.indexes {
+    func removeIds() {
+        for index in self.indexesToRemove {
             self.tempXml!.rootElement()!.elements(forName: "inferredMetricsTieBreakers").first!.removeChild(at: index)
-            Swift.print("removed")
         }
+        
+        self.indexesToRemove.removeAll()
+    }
+    
+    func checkIfThereAreIdsWithOnlyOneReference(arrayOfSegues: [XMLNode]) -> Bool {
+        let xmlAsString = self.tempXml?.xmlString
+
+        for i in 0...arrayOfSegues.count - 1 {
+            
+            if arrayOfSegues[i].kind == .element {
+                let node = arrayOfSegues[i]
+                let element = node as! XMLElement
+                
+                if let keyNode = element.attribute(forName: "reference")?.stringValue  {
+                    if xmlAsString?.countInstances(of: keyNode) == 1 {
+                        self.indexesToRemove.append(i)
+                    }
+                }
+            }
+        }
+        
+        if self.indexesToRemove.count > 0 {
+            return true
+        }
+        
+        return false
     }
 }
 

@@ -16,6 +16,7 @@
 		72E1BEEF1F9EA49000434719 /* StoryboardMergerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E1BEEE1F9EA49000434719 /* StoryboardMergerTests.swift */; };
 		72E1BEFA1F9EA49000434719 /* StoryboardMergerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E1BEF91F9EA49000434719 /* StoryboardMergerUITests.swift */; };
 		B16DB71A502AFE2B763AA3F3 /* Pods_StoryboardMergerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE7CE75CB868F2F455AA47D1 /* Pods_StoryboardMergerTests.framework */; };
+		E4EB82981F9FA9FF000C6AD0 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB82971F9FA9FF000C6AD0 /* StringExtension.swift */; };
 		EC2E6AB1EB605E6ADAF803E5 /* Pods_StoryboardMerger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 693E17EB400871EA04740697 /* Pods_StoryboardMerger.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,7 @@
 		A8FCAD45D2EA3D08DBC8DAFB /* Pods-StoryboardMergerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StoryboardMergerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StoryboardMergerTests/Pods-StoryboardMergerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BE42F522FA0AFD4534EF04D0 /* Pods-StoryboardMergerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StoryboardMergerUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StoryboardMergerUITests/Pods-StoryboardMergerUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		DE7CE75CB868F2F455AA47D1 /* Pods_StoryboardMergerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StoryboardMergerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4EB82971F9FA9FF000C6AD0 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		E6A6F86C5B8431C7032DF7A3 /* Pods_StoryboardMergerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StoryboardMergerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -145,6 +147,7 @@
 				72E1BEE11F9EA48F00434719 /* Main.storyboard */,
 				72E1BEE41F9EA48F00434719 /* Info.plist */,
 				72E1BEE51F9EA48F00434719 /* StoryboardMerger.entitlements */,
+				E4EB82971F9FA9FF000C6AD0 /* StringExtension.swift */,
 			);
 			path = StoryboardMerger;
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4EB82981F9FA9FF000C6AD0 /* StringExtension.swift in Sources */,
 				72E1BEDC1F9EA48F00434719 /* ViewController.swift in Sources */,
 				72E1BEDA1F9EA48F00434719 /* AppDelegate.swift in Sources */,
 				72E1BEDE1F9EA48F00434719 /* Document.swift in Sources */,
